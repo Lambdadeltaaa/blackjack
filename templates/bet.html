@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Bet
+{% endblock %}
+
+{% block main %}
+    <h1>Place your bets</h1>
+    <h1>You have: ${{ player.cash }}</h1>
+
+    <form action="/bet" method="post">
+        <input required autofocus type="number" name="bet_amount" placeholder="Bet Amount">
+        <button type="submit">Bet</button>
+    </form>
+{% endblock %}

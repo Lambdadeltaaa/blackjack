@@ -1,0 +1,17 @@
+list of session key:values
+
+session['player_cash']
+session['bet_amount']
+
+session['deck']
+session['player_hand']
+session['dealer_hand']
+
+session['game_end']
+session['game_result']
+
+session['can_double_down']
+session['can_buy_insurance']
+session['bought_insurance']
+session['can_split']
+session['splitted']

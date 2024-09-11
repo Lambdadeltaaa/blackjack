@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Play
+{% endblock %}
+
+{% block main %}
+    <div id="dealer-hand">
+        {% if game.ended %}
+            <h1>The dealer has:</h1>
+            <h1>Total: {{ dealer.total_value }}</h1>
+
+            {% for card in dealer.hand %}
+                <img src="{{ url_for('static', filename='card_images/' ~ card) ~ '.png' }}" alt="{{ card }}" width="125px" height="182px">
+            {% endfor %}
+
+        {% else %}
+            <h1>The dealer has:</h1>
+            <h1>Total: {{ dealer.first_card_value }}</h1>
+
+            <img src="{{ url_for('static', filename='card_images/' ~ dealer.hand[0]) ~ '.png' }}" alt="{{ card }}" width="125px" height="182px">
+            <img src="{{ url_for('static', filename='card_images/back.png') }}" alt="{{ card }}" width="125px" height="182px">
+
+        {% endif %}
+    </div>
+
+
+    <div id="player-hand">
+        <h1>The player has:</h1>
+        <h1>Total: {{ player.total_value }}</h1>
+
+        {% for card in player.hand %}
+            <img src="{{ url_for('static', filename='card_images/' ~ card) ~ '.png' }}" alt="{{ card }}" width="125px" height="182px">
+        {% endfor %}
+    </div>
+
+
+    <div id="options">
+        {% set disable_buttons = game.ended or game.can_buy_insurance or game.can_split %}
+
+        <form action="/hit" method="get">
+            <button type="submit" {% if disable_buttons %}disabled{% endif %}>Hit</button>
+        </form>
+
+        <form action="/stand" method="get">
+            <button type="submit" {% if disable_buttons %}disabled{% endif %}>Stand</button>
+        </form>
+
+        <form action="/double_down" method="get">
+            <button type="submit" {% if disable_buttons or not game.can_double_down %}disabled{% endif %}>Double Down</button>
+        </form>
+
+        {% if game.can_buy_insurance %}
+            <form action="/insurance", method="post">
+                <h1>Buy insurance?</h1>
+                <p>Note: Insurance cost is half of your original bet, rounded to the nearest integer</p>
+                <input type="submit" name="insurance" value="Yes">
+                <input type="submit" name="insurance" value="No">
+            </form>
+        {% endif %}
+
+        {% if game.ended %}
+            <form action="/new_game" method="get">
+                <button type="submit">New Round (Repeat Bet: ${{ player.bet_amount }})</button>
+            </form>
+
+            <form action="/new_game" method="get">
+                <button type="submit">New Round (Change Bets)</button>
+            </form>
+        {% endif %}
+    </div>
+
+
+    <!-- Return the result of the game -->
+    {% if game.ended %}
+        <div id="results">
+            <h1>{{ game['result'] }}</h1>
+        </div>
+    {% endif %}
+
+    
+    <div id="player-cash-and-bet">
+        <h1>You have: ${{ player.cash }}</h1>
+        <h1>Bet amount: ${{ player.bet_amount }}</h1>
+    </div>
+{% endblock %}
