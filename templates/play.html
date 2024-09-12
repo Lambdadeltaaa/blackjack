@@ -60,7 +60,7 @@
         {% endif %}
 
         {% if game.ended %}
-            <form action="/new_game" method="get">
+            <form action="/repeat_bet" method="get">
                 <button type="submit">New Round (Repeat Bet: ${{ player.bet_amount }})</button>
             </form>
 

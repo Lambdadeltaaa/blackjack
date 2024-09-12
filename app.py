@@ -28,6 +28,11 @@ def new_game():
 
     # Initializing the game
     session['bet_amount'] = None
+    
+    if session.get('previous_bet_amount'):
+        session['bet_amount'] = session['previous_bet_amount']
+        
+    session['previous_bet_amount'] = None
 
     session['deck'] = Deck()
     session['dealer_hand'] = []
@@ -203,6 +208,21 @@ def bet():
             session['bet_amount'] = bet
             session['player_cash'] -= bet
         
+    return redirect("/play")
+
+
+@app.route("/repeat_bet")
+def repeat_bet():
+    # prevent the user from accessing this when the game has not even started yet
+    if session.get('dealer_hand') is None or session.get('player_hand') is None:
+            return redirect("/new_game")
+    
+    if session['game_end'] == True and session['previous_bet_amount'] is None and session['bet_amount'] <= session['player_cash']:
+        session['previous_bet_amount'] = session['bet_amount']
+        session['player_cash'] -= session['previous_bet_amount']
+
+        return redirect("/new_game")
+
     return redirect("/play")
 
 
