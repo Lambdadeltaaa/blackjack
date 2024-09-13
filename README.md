@@ -9,3 +9,5 @@ TODO:
 - Fix potential bugs
 - Style everything using CSS
 - Rewrite some code potentially to use AJAX for dynamic response
+
+testing merging
